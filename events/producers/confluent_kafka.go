@@ -1,9 +1,10 @@
 package eventProducers
 
 import (
-	"ellekrau/fullcycle-kafka-go/events/topics"
 	"encoding/json"
 	"time"
+
+	"github.com/marcelobiao/poc-kafka/events/topics"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )

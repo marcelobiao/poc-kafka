@@ -1,8 +1,9 @@
 package eventProducers
 
 import (
-	"ellekrau/fullcycle-kafka-go/events/topics"
 	"errors"
+
+	"github.com/marcelobiao/poc-kafka/events/topics"
 )
 
 var (

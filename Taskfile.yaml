@@ -1,0 +1,10 @@
+version: '3'
+
+dotenv: ['.env.test']
+vars:
+
+tasks:
+  build:
+    desc: build
+    cmds:
+      - docker-compose up -d --build

@@ -14,3 +14,7 @@ var (
 type IEventProducer interface {
 	SendEvent(topic topics.ITopic, header topics.TopicHeader) error
 }
+
+type ProducerConfig struct {
+	Broker string
+}

@@ -2,35 +2,30 @@ package eventProducers
 
 import (
 	"encoding/json"
-	"time"
 
 	"github.com/marcelobiao/poc-kafka/events/topics"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
-type ConfluentEventConsumer struct {
+type ConfluentEventProducer struct {
 	Config   *kafka.ConfigMap
 	Producer *kafka.Producer
 	Chan     chan kafka.Event
 }
 
-func GetConfluentEventConsumer(config *kafka.ConfigMap, ch chan kafka.Event) (confluentEventConsumer ConfluentEventConsumer, err error) {
+func NewConfluentEventProducer(config *kafka.ConfigMap, ch chan kafka.Event) (confluentEventProducer ConfluentEventProducer, err error) {
 	producer, err := kafka.NewProducer(config)
-	confluentEventConsumer.Config = config
-	confluentEventConsumer.Producer = producer
-	confluentEventConsumer.Chan = ch
+	confluentEventProducer.Config = config
+	confluentEventProducer.Producer = producer
+	confluentEventProducer.Chan = ch
 
 	return
 }
 
-func (c *ConfluentEventConsumer) SendEvent(topic topics.ITopic, header topics.TopicHeader) (err error) {
+func (c *ConfluentEventProducer) SendEvent(topic topics.ITopic, header topics.TopicHeader) (err error) {
 	topicName := topic.GetTopicName()
 	message, err := json.Marshal(topic.GetPayloadMessage())
-	if err != nil {
-		return Err
-	}
-	key, err := json.Marshal(header.DbName)
 	if err != nil {
 		return Err
 	}
@@ -40,9 +35,7 @@ func (c *ConfluentEventConsumer) SendEvent(topic topics.ITopic, header topics.To
 			Topic:     &topicName,
 			Partition: kafka.PartitionAny,
 		},
-		Value:     message,
-		Key:       key,
-		Timestamp: time.Now(),
+		Value: message,
 		//TODO: Add Headers: ,
 	}
 	err = c.Producer.Produce(kafkaMessage, c.Chan)

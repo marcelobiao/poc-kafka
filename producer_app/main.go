@@ -5,7 +5,7 @@ import (
 	"log"
 
 	eventProducers "github.com/marcelobiao/poc-kafka/events/producers"
-	"github.com/marcelobiao/poc-kafka/service_producer/service"
+	producerApp "github.com/marcelobiao/poc-kafka/producer_app/app"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 )
@@ -16,11 +16,11 @@ func main() {
 	}
 	ch := make(chan kafka.Event)
 	go runKafkaMessageDeliveryReport(ch)
-	confluentProducer, err := eventProducers.GetConfluentEventConsumer(&config, ch)
+	confluentProducer, err := eventProducers.NewConfluentEventProducer(&config, ch)
 	if err != nil {
 		return
 	}
-	producer := service.GetExampleProducer(&confluentProducer)
+	producer := producerApp.GetExampleProducer(&confluentProducer)
 	err = producer.Run()
 	if err != nil {
 		return
